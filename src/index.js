@@ -3,11 +3,23 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { legacy_createStore as createStore } from 'redux';
+import { applyMiddleware, legacy_createStore as createStore } from 'redux';
 import rootReducer from './modules';
 import { Provider } from 'react-redux';
 
-const store = createStore(rootReducer);
+/** redux 미들웨어 */
+import logger from 'redux-logger';
+import { thunk } from 'redux-thunk';
+
+import { composeWithDevTools } from '@redux-devtools/extension';
+//redux devtools 설치 참고 블로그: https://happy-jjang-a.tistory.com/253
+
+const store = createStore(
+  rootReducer, 
+  composeWithDevTools(
+    applyMiddleware(logger, thunk)
+  )
+); //applyMiddleware함수에 여러개의 미들웨어를 적용할 수 있다.
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
